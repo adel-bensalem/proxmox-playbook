@@ -1,0 +1,10 @@
+- name: Get registered VM list
+  shell: cat /etc/pve/.vmlist
+  register: rawVmList
+
+- name: Get VM list
+  set_fact:
+    vmList: "{{ rawVmList.stdout | from_json | json_query('ids') }}"
+
+- name: Debug
+  debug: var=vmList

@@ -1,0 +1,6 @@
+- name: Storage
+  hosts: hypervisors
+  roles:
+    - storage
+    - firewall
+    - vm

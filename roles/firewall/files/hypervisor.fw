@@ -1,0 +1,10 @@
+[OPTIONS]
+
+enable: 1
+
+[RULES]
+
+GROUP pinger -i vmbr0
+GROUP glusterfs -i vmbr0
+GROUP monitoring -i vmbr0
+GROUP hypervisor -i vmbr0

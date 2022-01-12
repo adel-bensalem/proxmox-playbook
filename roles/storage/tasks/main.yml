@@ -1,0 +1,39 @@
+- name: Install gluster
+  apt:
+    name: glusterfs-server
+    state: present
+
+- name: Start service glusterd, if not started
+  service:
+    name: glusterd
+    state: started
+    enabled: yes
+
+- name: Probe peers
+  shell: gluster peer probe {{ item }}
+  with_items: "{{play_hosts}}"
+
+- name: Create brick directory
+  file:
+    path: /data/brick1/gv0
+    state: directory
+
+- name: Prepare replicas
+  set_fact:
+    replicas: "{{ replicas | default([]) + [item + ':/data/brick1/gv0'] }}"
+  with_items: "{{ play_hosts }}"
+
+- name: Create gluster volume
+  shell: "gluster volume create gv0 replica {{ play_hosts|length }} {{ replicas | join(' ') }}"
+  run_once: true
+  ignore_errors: yes
+
+- name: Start gluster volume
+  shell: "gluster volume start gv0"
+  run_once: true
+  ignore_errors: yes
+
+- name: Add gluster volume
+  shell: pvesm add glusterfs gluster --volume gv0
+  run_once: true
+  ignore_errors: yes

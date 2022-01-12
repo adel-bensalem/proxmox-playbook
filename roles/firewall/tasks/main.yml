@@ -1,0 +1,9 @@
+- name: Create security groups
+  copy:
+    src: cluster.fw
+    dest: /etc/pve/firewall/cluster.fw
+
+- name: Add hypervisors security groups
+  copy:
+    src: hypervisor.fw
+    dest: "/etc/pve/nodes/{{ hostname }}/host.fw"

@@ -1,0 +1,5 @@
+[hypervisors]
+192.168.1.191 hostname=proxmox-4
+192.168.1.162 hostname=proxmox-5
+192.168.1.54  hostname=proxmox-6
+

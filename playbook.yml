@@ -4,3 +4,4 @@
     - storage
     - firewall
     - vm
+    - ha

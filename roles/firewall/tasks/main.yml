@@ -1,3 +1,8 @@
+- name: Create firewall directory if it does not exists
+  file:
+    path: /etc/pve/firewall
+    state: directory
+
 - name: Create security groups
   copy:
     src: cluster.fw

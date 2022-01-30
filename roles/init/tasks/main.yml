@@ -1,0 +1,18 @@
+- name: Install essential dependencies
+  apt:
+    pkg:
+      - wget
+      - build-essential
+      - libreadline-gplv2-dev
+      - libncursesw5-dev
+    state: present
+
+- name: Download Python
+  unarchive:
+    src: https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
+    dest: ~/python
+    remote_src: yes
+
+- name: Install Python
+  shell: cd ~/python && ./configure --enable-optimizations && make -j $(nproc) && make alt install
+

@@ -12,6 +12,7 @@
 - name: Probe peers
   shell: gluster peer probe {{ item }}
   with_items: "{{play_hosts}}"
+  ignore_errors: yes
 
 - name: Create brick directory
   file:
@@ -24,9 +25,13 @@
   with_items: "{{ play_hosts }}"
 
 - name: Create gluster volume
-  shell: "gluster volume create gv0 replica {{ play_hosts|length }} {{ replicas | join(' ') }}"
+  shell: "gluster volume create gv0 replica {{ play_hosts | length }} {{ replicas | join(' ') }} force"
   run_once: true
   ignore_errors: yes
+
+- name: Free space
+  shell: "gluster volume set gv0 cluster.min-free-disk 90%"
+  run_once: true
 
 - name: Start gluster volume
   shell: "gluster volume start gv0"
@@ -34,6 +39,6 @@
   ignore_errors: yes
 
 - name: Add gluster volume
-  shell: pvesm add glusterfs gluster --volume gv0
+  shell: "pvesm add --content iso,snippets,vztmpl,backup,images --volume gv0 --server {{ play_hosts | first }} --server2 {{ play_hosts | last }} glusterfs gluster"
   run_once: true
   ignore_errors: yes
